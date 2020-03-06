@@ -53,6 +53,17 @@ UILabel *fromLabel;
 -(void)removeAppLayouts:(id)arg1 ;
 @end
 
+@interface JBBulletinManager : NSObject
++(id)sharedInstance;
+-(id)showBulletinWithTitle:(NSString *)title message:(NSString *)message bundleID:(NSString *)bundleID;
+-(id)showBulletinWithTitle:(NSString *)title message:(NSString *)message bundleID:(NSString *)bundleID soundPath:(NSString *)soundPath;
+-(id)showBulletinWithTitle:(NSString *)title message:(NSString *)message bundleID:(NSString *)bundleID soundID:(int)inSoundID;
+-(id)showBulletinWithTitle:(NSString *)title message:(NSString *)message overrideBundleImage:(UIImage *)overridBundleImage;
+-(id)showBulletinWithTitle:(NSString *)title message:(NSString *)message overrideBundleImage:(UIImage *)overridBundleImage soundPath:(NSString *)soundPath;
+-(id)showBulletinWithTitle:(NSString *)title message:(NSString *)message overridBundleImage:(UIImage *)overridBundleImage soundID:(int)inSoundID;
+-(id)showBulletinWithTitle:(NSString *)title message:(NSString *)message bundleID:(NSString *)bundleID hasSound:(BOOL)hasSound soundID:(int)soundID vibrateMode:(int)vibrate soundPath:(NSString *)soundPath attachmentImage:(UIImage *)attachmentImage overrideBundleImage:(UIImage *)overrideBundleImage;
+@end
+
 %group tweak
 
 %hook SBSwitcherAppSuggestionContentView
@@ -167,6 +178,11 @@ UILabel *fromLabel;
         for(SBAppLayout * item in items) {
 					SBDisplayItem *itemz = [item.rolesToLayoutItemsMap objectForKey:one];
 					NSString *bundleID = itemz.bundleIdentifier;
+
+					[[objc_getClass("JBBulletinManager") sharedInstance] showBulletinWithTitle:@"Scorpion" 
+                                                        message:[arg1 objectForKey:@"Debug"] 
+                                                        bundleID:bundleID];
+
 					NSString *nowPlayingID = [[[%c(SBMediaController) sharedInstance] nowPlayingApplication] bundleIdentifier];
 
 					if (dontQuitNowPlaying && dontQuitNavigation) {

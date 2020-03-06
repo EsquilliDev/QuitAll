@@ -81,6 +81,7 @@ MRYIPCCenter* center;
                                                         bundleID:@"com.apple.MobileSMS"
                                                         soundID:1007];
 }
+%end
 
 %hook SBSwitcherAppSuggestionContentView
 -(void)didMoveToWindow {

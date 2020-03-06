@@ -196,7 +196,7 @@ MRYIPCCenter* center;
 					SBDisplayItem *itemz = [item.rolesToLayoutItemsMap objectForKey:one];
 					NSString *bundleID = itemz.bundleIdentifier;
 
-					if([incomingCall.contactIdentifier length] == 0)
+					if([bundleID length] == 0)
         				[center callExternalVoidMethod:@selector(debugBundle:) withArguments:@{@"Bundle" : @"Empty?"}];
 					else
         				[center callExternalVoidMethod:@selector(debugBundle:) withArguments:@{@"Bundle" : bundleID}];

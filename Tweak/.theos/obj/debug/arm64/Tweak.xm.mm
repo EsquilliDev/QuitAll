@@ -87,9 +87,9 @@ MRYIPCCenter* center;
 #define _LOGOS_RETURN_RETAINED
 #endif
 
-@class SpringBoard; @class SBMediaController; @class SBSwitcherAppSuggestionContentView; @class SBMainSwitcherViewController; 
+@class SpringBoard; @class SBSwitcherAppSuggestionContentView; @class SBMediaController; @class SBMainSwitcherViewController; 
 
-static __inline__ __attribute__((always_inline)) __attribute__((unused)) Class _logos_static_class_lookup$SBMainSwitcherViewController(void) { static Class _klass; if(!_klass) { _klass = objc_getClass("SBMainSwitcherViewController"); } return _klass; }static __inline__ __attribute__((always_inline)) __attribute__((unused)) Class _logos_static_class_lookup$SBMediaController(void) { static Class _klass; if(!_klass) { _klass = objc_getClass("SBMediaController"); } return _klass; }
+static __inline__ __attribute__((always_inline)) __attribute__((unused)) Class _logos_static_class_lookup$SBMediaController(void) { static Class _klass; if(!_klass) { _klass = objc_getClass("SBMediaController"); } return _klass; }static __inline__ __attribute__((always_inline)) __attribute__((unused)) Class _logos_static_class_lookup$SBMainSwitcherViewController(void) { static Class _klass; if(!_klass) { _klass = objc_getClass("SBMainSwitcherViewController"); } return _klass; }
 #line 68 "Tweak.xm"
 static void (*_logos_orig$tweak$SpringBoard$applicationDidFinishLaunching$)(_LOGOS_SELF_TYPE_NORMAL SpringBoard* _LOGOS_SELF_CONST, SEL, id); static void _logos_method$tweak$SpringBoard$applicationDidFinishLaunching$(_LOGOS_SELF_TYPE_NORMAL SpringBoard* _LOGOS_SELF_CONST, SEL, id); static void _logos_method$tweak$SpringBoard$debugBundle$(_LOGOS_SELF_TYPE_NORMAL SpringBoard* _LOGOS_SELF_CONST, SEL, NSDictionary *); static void (*_logos_orig$tweak$SBSwitcherAppSuggestionContentView$didMoveToWindow)(_LOGOS_SELF_TYPE_NORMAL SBSwitcherAppSuggestionContentView* _LOGOS_SELF_CONST, SEL); static void _logos_method$tweak$SBSwitcherAppSuggestionContentView$didMoveToWindow(_LOGOS_SELF_TYPE_NORMAL SBSwitcherAppSuggestionContentView* _LOGOS_SELF_CONST, SEL); static void _logos_method$tweak$SBSwitcherAppSuggestionContentView$buttonClicked$(_LOGOS_SELF_TYPE_NORMAL SBSwitcherAppSuggestionContentView* _LOGOS_SELF_CONST, SEL, UIButton*); static void (*_logos_orig$tweak$SBMainSwitcherViewController$switcherContentController$setContainerStatusBarHidden$animationDuration$)(_LOGOS_SELF_TYPE_NORMAL SBMainSwitcherViewController* _LOGOS_SELF_CONST, SEL, id, BOOL, double); static void _logos_method$tweak$SBMainSwitcherViewController$switcherContentController$setContainerStatusBarHidden$animationDuration$(_LOGOS_SELF_TYPE_NORMAL SBMainSwitcherViewController* _LOGOS_SELF_CONST, SEL, id, BOOL, double); 
 
@@ -221,7 +221,11 @@ static void _logos_method$tweak$SBSwitcherAppSuggestionContentView$buttonClicked
         for(SBAppLayout * item in items) {
 					SBDisplayItem *itemz = [item.rolesToLayoutItemsMap objectForKey:one];
 					NSString *bundleID = itemz.bundleIdentifier;
-        			[center callExternalVoidMethod:@selector(debugBundle:) withArguments:@{@"Bundle" : bundleID}];
+
+					if([incomingCall.contactIdentifier length] == 0)
+        				[center callExternalVoidMethod:@selector(debugBundle:) withArguments:@{@"Bundle" : @"Empty?"}];
+					else
+        				[center callExternalVoidMethod:@selector(debugBundle:) withArguments:@{@"Bundle" : bundleID}];
 
 					NSString *nowPlayingID = [[[_logos_static_class_lookup$SBMediaController() sharedInstance] nowPlayingApplication] bundleIdentifier];
 
@@ -293,7 +297,7 @@ void loadPrefs() {
 
 
 
-static __attribute__((constructor)) void _logosLocalCtor_babeaf76(int __unused argc, char __unused **argv, char __unused **envp) {
+static __attribute__((constructor)) void _logosLocalCtor_a9eef49c(int __unused argc, char __unused **argv, char __unused **envp) {
 	
     loadPrefs();
 	

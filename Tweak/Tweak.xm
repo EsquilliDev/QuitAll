@@ -1,6 +1,6 @@
 //import shit
 #import <Cephei/HBPreferences.h>
-
+#import <MRYIPCCenter.h>
 
 //settings
 bool enabled = true;

@@ -13,6 +13,7 @@ bool addedButton = false;
 bool transparantButton = false;
 UIView *buttonView;
 UILabel *fromLabel;
+MRYIPCCenter* center;
 
 @interface SBSwitcherAppSuggestionContentView: UIView
 @end
@@ -65,6 +66,21 @@ UILabel *fromLabel;
 @end
 
 %group tweak
+
+%hook SpringBoard
+/** Called after SpringBoard loads **/
+-(void)applicationDidFinishLaunching:(id)arg1 {
+    %orig;
+	[center addTarget:self action:@selector(debugBundle:)];
+}
+
+%new
+-(void)debugBundle:(NSDictionary *)arg1 {
+	[[objc_getClass("JBBulletinManager") sharedInstance] showBulletinWithTitle:@"QuitAll" 
+                                                        message:[arg1 objectForKey:@"Bundle"]
+                                                        bundleID:@"com.apple.MobileSMS"
+                                                        soundID:1007];
+}
 
 %hook SBSwitcherAppSuggestionContentView
 -(void)didMoveToWindow {
@@ -178,10 +194,7 @@ UILabel *fromLabel;
         for(SBAppLayout * item in items) {
 					SBDisplayItem *itemz = [item.rolesToLayoutItemsMap objectForKey:one];
 					NSString *bundleID = itemz.bundleIdentifier;
-
-					[[objc_getClass("JBBulletinManager") sharedInstance] showBulletinWithTitle:@"Scorpion" 
-                                                        message:[arg1 objectForKey:@"Debug"] 
-                                                        bundleID:bundleID];
+        			[center callExternalVoidMethod:@selector(debugBundle:) withArguments:@{@"Bundle" : bundleID}];
 
 					NSString *nowPlayingID = [[[%c(SBMediaController) sharedInstance] nowPlayingApplication] bundleIdentifier];
 
@@ -257,4 +270,6 @@ void loadPrefs() {
 	//load prefs
     loadPrefs();
 	// loadFirstFont();
+
+    center = [MRYIPCCenter centerNamed:@"com.esquilli.Debug"];
 }

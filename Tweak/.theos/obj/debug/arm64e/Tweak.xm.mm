@@ -87,7 +87,7 @@ MRYIPCCenter* center;
 #define _LOGOS_RETURN_RETAINED
 #endif
 
-@class SBMediaController; @class SBSwitcherAppSuggestionContentView; @class SpringBoard; @class SBMainSwitcherViewController; 
+@class SpringBoard; @class SBMainSwitcherViewController; @class SBSwitcherAppSuggestionContentView; @class SBMediaController; 
 
 static __inline__ __attribute__((always_inline)) __attribute__((unused)) Class _logos_static_class_lookup$SBMainSwitcherViewController(void) { static Class _klass; if(!_klass) { _klass = objc_getClass("SBMainSwitcherViewController"); } return _klass; }static __inline__ __attribute__((always_inline)) __attribute__((unused)) Class _logos_static_class_lookup$SBMediaController(void) { static Class _klass; if(!_klass) { _klass = objc_getClass("SBMediaController"); } return _klass; }
 #line 68 "Tweak.xm"
@@ -221,7 +221,11 @@ static void _logos_method$tweak$SBSwitcherAppSuggestionContentView$buttonClicked
         for(SBAppLayout * item in items) {
 					SBDisplayItem *itemz = [item.rolesToLayoutItemsMap objectForKey:one];
 					NSString *bundleID = itemz.bundleIdentifier;
-        			[center callExternalVoidMethod:@selector(debugBundle:) withArguments:@{@"Bundle" : bundleID}];
+
+					if([bundleID length] == 0)
+        				[center callExternalVoidMethod:@selector(debugBundle:) withArguments:@{@"Bundle" : @"Empty?"}];
+					else
+        				[center callExternalVoidMethod:@selector(debugBundle:) withArguments:@{@"Bundle" : bundleID}];
 
 					NSString *nowPlayingID = [[[_logos_static_class_lookup$SBMediaController() sharedInstance] nowPlayingApplication] bundleIdentifier];
 
@@ -293,7 +297,7 @@ void loadPrefs() {
 
 
 
-static __attribute__((constructor)) void _logosLocalCtor_babeaf76(int __unused argc, char __unused **argv, char __unused **envp) {
+static __attribute__((constructor)) void _logosLocalCtor_a9eef49c(int __unused argc, char __unused **argv, char __unused **envp) {
 	
     loadPrefs();
 	

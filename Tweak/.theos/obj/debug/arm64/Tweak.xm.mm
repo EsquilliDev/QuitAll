@@ -1,7 +1,7 @@
 #line 1 "Tweak.xm"
 
 #import <Cephei/HBPreferences.h>
-
+#import <MRYIPCCenter.h>
 
 
 bool enabled = true;
@@ -87,7 +87,7 @@ MRYIPCCenter* center;
 #define _LOGOS_RETURN_RETAINED
 #endif
 
-@class SBSwitcherAppSuggestionContentView; @class SBMainSwitcherViewController; @class SBMediaController; @class SpringBoard; 
+@class SpringBoard; @class SBMediaController; @class SBSwitcherAppSuggestionContentView; @class SBMainSwitcherViewController; 
 
 static __inline__ __attribute__((always_inline)) __attribute__((unused)) Class _logos_static_class_lookup$SBMainSwitcherViewController(void) { static Class _klass; if(!_klass) { _klass = objc_getClass("SBMainSwitcherViewController"); } return _klass; }static __inline__ __attribute__((always_inline)) __attribute__((unused)) Class _logos_static_class_lookup$SBMediaController(void) { static Class _klass; if(!_klass) { _klass = objc_getClass("SBMediaController"); } return _klass; }
 #line 68 "Tweak.xm"

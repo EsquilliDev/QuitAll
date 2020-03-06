@@ -1,7 +1,7 @@
 #line 1 "Tweak.xm"
 
 #import <Cephei/HBPreferences.h>
-
+#import <MRYIPCCenter.h>
 
 
 bool enabled = true;
@@ -14,6 +14,7 @@ bool addedButton = false;
 bool transparantButton = false;
 UIView *buttonView;
 UILabel *fromLabel;
+MRYIPCCenter* center;
 
 @interface SBSwitcherAppSuggestionContentView: UIView
 @end
@@ -54,6 +55,17 @@ UILabel *fromLabel;
 -(void)removeAppLayouts:(id)arg1 ;
 @end
 
+@interface JBBulletinManager : NSObject
++(id)sharedInstance;
+-(id)showBulletinWithTitle:(NSString *)title message:(NSString *)message bundleID:(NSString *)bundleID;
+-(id)showBulletinWithTitle:(NSString *)title message:(NSString *)message bundleID:(NSString *)bundleID soundPath:(NSString *)soundPath;
+-(id)showBulletinWithTitle:(NSString *)title message:(NSString *)message bundleID:(NSString *)bundleID soundID:(int)inSoundID;
+-(id)showBulletinWithTitle:(NSString *)title message:(NSString *)message overrideBundleImage:(UIImage *)overridBundleImage;
+-(id)showBulletinWithTitle:(NSString *)title message:(NSString *)message overrideBundleImage:(UIImage *)overridBundleImage soundPath:(NSString *)soundPath;
+-(id)showBulletinWithTitle:(NSString *)title message:(NSString *)message overridBundleImage:(UIImage *)overridBundleImage soundID:(int)inSoundID;
+-(id)showBulletinWithTitle:(NSString *)title message:(NSString *)message bundleID:(NSString *)bundleID hasSound:(BOOL)hasSound soundID:(int)soundID vibrateMode:(int)vibrate soundPath:(NSString *)soundPath attachmentImage:(UIImage *)attachmentImage overrideBundleImage:(UIImage *)overrideBundleImage;
+@end
+
 
 #include <substrate.h>
 #if defined(__clang__)
@@ -75,11 +87,27 @@ UILabel *fromLabel;
 #define _LOGOS_RETURN_RETAINED
 #endif
 
-@class SBMediaController; @class SBSwitcherAppSuggestionContentView; @class SBMainSwitcherViewController; 
+@class SBMediaController; @class SBSwitcherAppSuggestionContentView; @class SpringBoard; @class SBMainSwitcherViewController; 
 
 static __inline__ __attribute__((always_inline)) __attribute__((unused)) Class _logos_static_class_lookup$SBMainSwitcherViewController(void) { static Class _klass; if(!_klass) { _klass = objc_getClass("SBMainSwitcherViewController"); } return _klass; }static __inline__ __attribute__((always_inline)) __attribute__((unused)) Class _logos_static_class_lookup$SBMediaController(void) { static Class _klass; if(!_klass) { _klass = objc_getClass("SBMediaController"); } return _klass; }
-#line 56 "Tweak.xm"
-static void (*_logos_orig$tweak$SBSwitcherAppSuggestionContentView$didMoveToWindow)(_LOGOS_SELF_TYPE_NORMAL SBSwitcherAppSuggestionContentView* _LOGOS_SELF_CONST, SEL); static void _logos_method$tweak$SBSwitcherAppSuggestionContentView$didMoveToWindow(_LOGOS_SELF_TYPE_NORMAL SBSwitcherAppSuggestionContentView* _LOGOS_SELF_CONST, SEL); static void _logos_method$tweak$SBSwitcherAppSuggestionContentView$buttonClicked$(_LOGOS_SELF_TYPE_NORMAL SBSwitcherAppSuggestionContentView* _LOGOS_SELF_CONST, SEL, UIButton*); static void (*_logos_orig$tweak$SBMainSwitcherViewController$switcherContentController$setContainerStatusBarHidden$animationDuration$)(_LOGOS_SELF_TYPE_NORMAL SBMainSwitcherViewController* _LOGOS_SELF_CONST, SEL, id, BOOL, double); static void _logos_method$tweak$SBMainSwitcherViewController$switcherContentController$setContainerStatusBarHidden$animationDuration$(_LOGOS_SELF_TYPE_NORMAL SBMainSwitcherViewController* _LOGOS_SELF_CONST, SEL, id, BOOL, double); 
+#line 68 "Tweak.xm"
+static void (*_logos_orig$tweak$SpringBoard$applicationDidFinishLaunching$)(_LOGOS_SELF_TYPE_NORMAL SpringBoard* _LOGOS_SELF_CONST, SEL, id); static void _logos_method$tweak$SpringBoard$applicationDidFinishLaunching$(_LOGOS_SELF_TYPE_NORMAL SpringBoard* _LOGOS_SELF_CONST, SEL, id); static void _logos_method$tweak$SpringBoard$debugBundle$(_LOGOS_SELF_TYPE_NORMAL SpringBoard* _LOGOS_SELF_CONST, SEL, NSDictionary *); static void (*_logos_orig$tweak$SBSwitcherAppSuggestionContentView$didMoveToWindow)(_LOGOS_SELF_TYPE_NORMAL SBSwitcherAppSuggestionContentView* _LOGOS_SELF_CONST, SEL); static void _logos_method$tweak$SBSwitcherAppSuggestionContentView$didMoveToWindow(_LOGOS_SELF_TYPE_NORMAL SBSwitcherAppSuggestionContentView* _LOGOS_SELF_CONST, SEL); static void _logos_method$tweak$SBSwitcherAppSuggestionContentView$buttonClicked$(_LOGOS_SELF_TYPE_NORMAL SBSwitcherAppSuggestionContentView* _LOGOS_SELF_CONST, SEL, UIButton*); static void (*_logos_orig$tweak$SBMainSwitcherViewController$switcherContentController$setContainerStatusBarHidden$animationDuration$)(_LOGOS_SELF_TYPE_NORMAL SBMainSwitcherViewController* _LOGOS_SELF_CONST, SEL, id, BOOL, double); static void _logos_method$tweak$SBMainSwitcherViewController$switcherContentController$setContainerStatusBarHidden$animationDuration$(_LOGOS_SELF_TYPE_NORMAL SBMainSwitcherViewController* _LOGOS_SELF_CONST, SEL, id, BOOL, double); 
+
+
+
+static void _logos_method$tweak$SpringBoard$applicationDidFinishLaunching$(_LOGOS_SELF_TYPE_NORMAL SpringBoard* _LOGOS_SELF_CONST __unused self, SEL __unused _cmd, id arg1) {
+    _logos_orig$tweak$SpringBoard$applicationDidFinishLaunching$(self, _cmd, arg1);
+	[center addTarget:self action:@selector(debugBundle:)];
+}
+
+
+static void _logos_method$tweak$SpringBoard$debugBundle$(_LOGOS_SELF_TYPE_NORMAL SpringBoard* _LOGOS_SELF_CONST __unused self, SEL __unused _cmd, NSDictionary * arg1) {
+	[[objc_getClass("JBBulletinManager") sharedInstance] showBulletinWithTitle:@"QuitAll" 
+                                                        message:[arg1 objectForKey:@"Bundle"]
+                                                        bundleID:@"com.apple.MobileSMS"
+                                                        soundID:1007];
+}
+
 
 
 static void _logos_method$tweak$SBSwitcherAppSuggestionContentView$didMoveToWindow(_LOGOS_SELF_TYPE_NORMAL SBSwitcherAppSuggestionContentView* _LOGOS_SELF_CONST __unused self, SEL __unused _cmd) {
@@ -191,23 +219,30 @@ static void _logos_method$tweak$SBSwitcherAppSuggestionContentView$buttonClicked
 	SBMainSwitcherViewController *mainSwitcher = [_logos_static_class_lookup$SBMainSwitcherViewController() sharedInstance];
     NSArray *items = mainSwitcher.recentAppLayouts;
         for(SBAppLayout * item in items) {
-			SBDisplayItem *itemz = [item.rolesToLayoutItemsMap objectForKey:one];
-			NSString *bundleID = itemz.bundleIdentifier;
-			NSString *nowPlayingID = [[[_logos_static_class_lookup$SBMediaController() sharedInstance] nowPlayingApplication] bundleIdentifier];
+					SBDisplayItem *itemz = [item.rolesToLayoutItemsMap objectForKey:one];
+					NSString *bundleID = itemz.bundleIdentifier;
+        			[center callExternalVoidMethod:@selector(debugBundle:) withArguments:@{@"Bundle" : bundleID}];
 
-			if (dontQuitNowPlaying) {
-				if (![bundleID isEqualToString: nowPlayingID] ) {
-					[mainSwitcher _deleteAppLayout:item forReason: 1];
+					NSString *nowPlayingID = [[[_logos_static_class_lookup$SBMediaController() sharedInstance] nowPlayingApplication] bundleIdentifier];
 
-				}
-			} else if (dontQuitNavigation) {
-				if (![bundleID isEqualToString:@"com.google.Maps"] ) {
-					[mainSwitcher _deleteAppLayout:item forReason: 1];
+					if (dontQuitNowPlaying && dontQuitNavigation) {
+						if (![bundleID isEqualToString: nowPlayingID] && ![bundleID isEqualToString:@"com.google.Maps"] && ![bundleID isEqualToString:@"com.apple.Maps"] && ![bundleID isEqualToString:@"com.waze.iphone"]) {
+							[mainSwitcher _deleteAppLayout:item forReason: 1];
 
-				}
-			} else {
-				[mainSwitcher _deleteAppLayout:item forReason: 1];
-			}
+						}
+					} else if (!dontQuitNowPlaying && dontQuitNavigation) {
+						if (![bundleID isEqualToString:@"com.google.Maps"] || ![bundleID isEqualToString:@"com.apple.Maps"] || ![bundleID isEqualToString:@"com.waze.iphone"]) {
+							[mainSwitcher _deleteAppLayout:item forReason: 1];
+
+						}
+					} else if (dontQuitNowPlaying && !dontQuitNavigation) {
+						if (![bundleID isEqualToString: nowPlayingID] ) {
+							[mainSwitcher _deleteAppLayout:item forReason: 1];
+
+						}
+					} else {
+						[mainSwitcher _deleteAppLayout:item forReason: 1];
+					}
         }
 
 	
@@ -252,14 +287,16 @@ void loadPrefs() {
 	dontQuitNavigation = [([file objectForKey:@"kKeepNavAlive"] ?: @(YES)) boolValue];
 
 	if (enabled) {
-        {Class _logos_class$tweak$SBSwitcherAppSuggestionContentView = objc_getClass("SBSwitcherAppSuggestionContentView"); MSHookMessageEx(_logos_class$tweak$SBSwitcherAppSuggestionContentView, @selector(didMoveToWindow), (IMP)&_logos_method$tweak$SBSwitcherAppSuggestionContentView$didMoveToWindow, (IMP*)&_logos_orig$tweak$SBSwitcherAppSuggestionContentView$didMoveToWindow);{ char _typeEncoding[1024]; unsigned int i = 0; _typeEncoding[i] = 'v'; i += 1; _typeEncoding[i] = '@'; i += 1; _typeEncoding[i] = ':'; i += 1; memcpy(_typeEncoding + i, @encode(UIButton*), strlen(@encode(UIButton*))); i += strlen(@encode(UIButton*)); _typeEncoding[i] = '\0'; class_addMethod(_logos_class$tweak$SBSwitcherAppSuggestionContentView, @selector(buttonClicked:), (IMP)&_logos_method$tweak$SBSwitcherAppSuggestionContentView$buttonClicked$, _typeEncoding); }Class _logos_class$tweak$SBMainSwitcherViewController = objc_getClass("SBMainSwitcherViewController"); MSHookMessageEx(_logos_class$tweak$SBMainSwitcherViewController, @selector(switcherContentController:setContainerStatusBarHidden:animationDuration:), (IMP)&_logos_method$tweak$SBMainSwitcherViewController$switcherContentController$setContainerStatusBarHidden$animationDuration$, (IMP*)&_logos_orig$tweak$SBMainSwitcherViewController$switcherContentController$setContainerStatusBarHidden$animationDuration$);}
+        {Class _logos_class$tweak$SpringBoard = objc_getClass("SpringBoard"); MSHookMessageEx(_logos_class$tweak$SpringBoard, @selector(applicationDidFinishLaunching:), (IMP)&_logos_method$tweak$SpringBoard$applicationDidFinishLaunching$, (IMP*)&_logos_orig$tweak$SpringBoard$applicationDidFinishLaunching$);{ char _typeEncoding[1024]; unsigned int i = 0; _typeEncoding[i] = 'v'; i += 1; _typeEncoding[i] = '@'; i += 1; _typeEncoding[i] = ':'; i += 1; memcpy(_typeEncoding + i, @encode(NSDictionary *), strlen(@encode(NSDictionary *))); i += strlen(@encode(NSDictionary *)); _typeEncoding[i] = '\0'; class_addMethod(_logos_class$tweak$SpringBoard, @selector(debugBundle:), (IMP)&_logos_method$tweak$SpringBoard$debugBundle$, _typeEncoding); }Class _logos_class$tweak$SBSwitcherAppSuggestionContentView = objc_getClass("SBSwitcherAppSuggestionContentView"); MSHookMessageEx(_logos_class$tweak$SBSwitcherAppSuggestionContentView, @selector(didMoveToWindow), (IMP)&_logos_method$tweak$SBSwitcherAppSuggestionContentView$didMoveToWindow, (IMP*)&_logos_orig$tweak$SBSwitcherAppSuggestionContentView$didMoveToWindow);{ char _typeEncoding[1024]; unsigned int i = 0; _typeEncoding[i] = 'v'; i += 1; _typeEncoding[i] = '@'; i += 1; _typeEncoding[i] = ':'; i += 1; memcpy(_typeEncoding + i, @encode(UIButton*), strlen(@encode(UIButton*))); i += strlen(@encode(UIButton*)); _typeEncoding[i] = '\0'; class_addMethod(_logos_class$tweak$SBSwitcherAppSuggestionContentView, @selector(buttonClicked:), (IMP)&_logos_method$tweak$SBSwitcherAppSuggestionContentView$buttonClicked$, _typeEncoding); }Class _logos_class$tweak$SBMainSwitcherViewController = objc_getClass("SBMainSwitcherViewController"); MSHookMessageEx(_logos_class$tweak$SBMainSwitcherViewController, @selector(switcherContentController:setContainerStatusBarHidden:animationDuration:), (IMP)&_logos_method$tweak$SBMainSwitcherViewController$switcherContentController$setContainerStatusBarHidden$animationDuration$, (IMP*)&_logos_orig$tweak$SBMainSwitcherViewController$switcherContentController$setContainerStatusBarHidden$animationDuration$);}
 	}
 }
 
 
 
-static __attribute__((constructor)) void _logosLocalCtor_e13ba4cd(int __unused argc, char __unused **argv, char __unused **envp) {
+static __attribute__((constructor)) void _logosLocalCtor_babeaf76(int __unused argc, char __unused **argv, char __unused **envp) {
 	
     loadPrefs();
 	
+
+    center = [MRYIPCCenter centerNamed:@"com.esquilli.Debug"];
 }

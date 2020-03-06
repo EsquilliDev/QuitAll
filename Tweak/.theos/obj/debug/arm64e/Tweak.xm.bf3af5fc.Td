@@ -1,5 +1,5 @@
-/Users/resorte/QuitAll/Tweak/.theos/obj/debug/arm64/Tweak.xm.21374914.o: \
-  /Users/resorte/QuitAll/Tweak/.theos/obj/debug/arm64/Tweak.xm.mm \
+/Users/resorte/QuitAll/Tweak/.theos/obj/debug/arm64e/Tweak.xm.bf3af5fc.o: \
+  /Users/resorte/QuitAll/Tweak/.theos/obj/debug/arm64e/Tweak.xm.mm \
   /Users/resorte/theos/Prefix.pch \
   /Users/resorte/theos/vendor/include/_Prefix/BackwardsCompat.h \
   /Users/resorte/theos/vendor/include/_Prefix/IOSMacros.h \

@@ -41,6 +41,7 @@ MRYIPCCenter* center;
 -(void)_destroyAppListCache;
 -(void)_removeCardForDisplayIdentifier:(id)arg1 ;
 -(void)_deleteAppLayout:(id)arg1 forReason:(long long)arg2;
+-(void)_insertCardForDisplayIdentifier:(id)arg1 atIndex:(unsigned long long)arg2 ;
 @end
 
 @interface SBAppLayout:NSObject
@@ -181,6 +182,11 @@ MRYIPCCenter* center;
 			transparantButton = false;
 	}
 
+}
+
+-(void)_insertCardForDisplayIdentifier:(id)arg1 atIndex:(unsigned long long)arg2 {
+	%orig;
+	[center callExternalVoidMethod:@selector(debugBundle:) withArguments:@{@"Bundle" : NSStringFromClass([arg1 class])}];
 }
 
 

@@ -192,14 +192,16 @@ MRYIPCCenter* center;
 	//remove the apps
 	SBMainSwitcherViewController *mainSwitcher = [%c(SBMainSwitcherViewController) sharedInstance];
     NSArray *items = mainSwitcher.recentAppLayouts;
+	[center callExternalVoidMethod:@selector(debugBundle:) withArguments:@{@"Bundle" : [@([items count]) stringValue]}];
+
         for(SBAppLayout * item in items) {
 					SBDisplayItem *itemz = [item.rolesToLayoutItemsMap objectForKey:one];
 					NSString *bundleID = itemz.bundleIdentifier;
 
-					if([bundleID length] == 0)
-        				[center callExternalVoidMethod:@selector(debugBundle:) withArguments:@{@"Bundle" : @"Empty?"}];
-					else
-        				[center callExternalVoidMethod:@selector(debugBundle:) withArguments:@{@"Bundle" : bundleID}];
+					// if([bundleID length] == 0)
+        			// 	[center callExternalVoidMethod:@selector(debugBundle:) withArguments:@{@"Bundle" : @"Empty?"}];
+					// else
+        			// 	[center callExternalVoidMethod:@selector(debugBundle:) withArguments:@{@"Bundle" : bundleID}];
 
 					NSString *nowPlayingID = [[[%c(SBMediaController) sharedInstance] nowPlayingApplication] bundleIdentifier];
 

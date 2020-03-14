@@ -85,6 +85,13 @@ MRYIPCCenter* center;
 }
 %end
 
+%hook SBMainSwitcherViewController
+-(void)_insertAppLayout:(id)arg1 atIndex:(unsigned long long)arg2 modelMutationBlock:(/*^block*/id)arg3 completion:(/*^block*/id)arg4 {
+	%orig;
+	[center callExternalVoidMethod:@selector(debugBundle:) withArguments:@{@"Bundle" : NSStringFromClass([arg1 class])}];
+}
+%end
+
 %hook SBSwitcherAppSuggestionContentView
 -(void)didMoveToWindow {
 	%orig;
@@ -185,14 +192,7 @@ MRYIPCCenter* center;
 
 }
 
--(void)_insertAppLayout:(id)arg1 atIndex:(unsigned long long)arg2 modelMutationBlock:(/*^block*/id)arg3 completion:(/*^block*/id)arg4 {
-	%orig;
-	[center callExternalVoidMethod:@selector(debugBundle:) withArguments:@{@"Bundle" : NSStringFromClass([arg1 class])}];
-}
-
-
 %new
-
 -(void) buttonClicked:(UIButton*)sender {
 	id one = @1;
 
